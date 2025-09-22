@@ -30,19 +30,19 @@ export default function HomePage() {
     {
       name: "Netarhat",
       description: "Queen of Chotanagpur",
-      image: "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg",
+      image: "/pics/netarhat.jpeg",
       rating: 4.8
     },
     {
       name: "Hundru Falls",
       description: "Majestic waterfall",
-      image: "https://images.pexels.com/photos/552616/pexels-photo-552616.jpeg",
+      image: "/pics/hundru.webp",
       rating: 4.6
     },
     {
       name: "Betla National Park",
       description: "Wildlife paradise",
-      image: "https://images.pexels.com/photos/1831234/pexels-photo-1831234.jpeg",
+      image: "/pics/betla.webp",
       rating: 4.7
     }
   ];

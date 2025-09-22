@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { MessageCircle, X, Send, Globe } from 'lucide-react';
+import React, { useState } from "react";
+import { MessageCircle, X, Send, Globe } from "lucide-react";
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [language, setLanguage] = useState('english');
+  const [language, setLanguage] = useState("english");
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -12,13 +12,13 @@ export default function ChatBot() {
       timestamp: new Date()
     }
   ]);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
 
   const languages = [
-    { code: 'english', name: 'English', native: 'English' },
-    { code: 'hindi', name: 'Hindi', native: 'हिंदी' },
-    { code: 'santhali', name: 'Santhali', native: 'ᱥᱟᱱᱛᱟᱲᱤ' },
-    { code: 'nagpuri', name: 'Nagpuri', native: 'नागपुरी' }
+    { code: "english", name: "English", native: "English" },
+    { code: "hindi", name: "Hindi", native: "हिंदी" },
+    { code: "santhali", name: "Santhali", native: "ᱥᱟᱱᱛᱟᱲᱤ" },
+    { code: "nagpuri", name: "Nagpuri", native: "नागपुरी" }
   ];
 
   const quickQuestions = [
@@ -33,7 +33,7 @@ export default function ChatBot() {
     if (!inputText.trim()) return;
 
     const currentInput = inputText;
-    setInputText('');
+    setInputText("");
 
     const userMessage = {
       id: Date.now(),
@@ -41,16 +41,15 @@ export default function ChatBot() {
       isBot: false,
       timestamp: new Date()
     };
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
 
-    // Add loading message
     const loadingMessage = {
       id: Date.now() + 1,
       text: "Thinking...",
       isBot: true,
       timestamp: new Date()
     };
-    setMessages(prev => [...prev, loadingMessage]);
+    setMessages((prev) => [...prev, loadingMessage]);
 
     try {
       const response = await getBotResponse(currentInput);
@@ -60,7 +59,7 @@ export default function ChatBot() {
         isBot: true,
         timestamp: new Date()
       };
-      setMessages(prev => prev.slice(0, -1).concat(botResponse));
+      setMessages((prev) => prev.slice(0, -1).concat(botResponse));
     } catch (error) {
       const errorResponse = {
         id: Date.now() + 3,
@@ -68,62 +67,48 @@ export default function ChatBot() {
         isBot: true,
         timestamp: new Date()
       };
-      setMessages(prev => prev.slice(0, -1).concat(errorResponse));
+      setMessages((prev) => prev.slice(0, -1).concat(errorResponse));
     }
   };
 
-  // -------------------- OpenRouter API --------------------
   const getBotResponse = async (input: string) => {
-    const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-    if (!apiKey || apiKey === "your_openrouter_api_key_here") {
+    if (!apiKey) {
+      console.warn("Gemini API key is missing in .env");
       return getFallbackResponse(input);
     }
 
     try {
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "deepseek/deepseek-v3.1-terminus", // example model, change if needed
-          messages: [
-            {
-              role: "system",
-              content: "You are a knowledgeable tourism assistant for Jharkhand, India. Answer concisely about destinations, festivals, culture, food, and travel tips."
-            },
-            {
-              role: "user",
-              content: input
-            }
-          ],
-          temperature: 0.7,
-          top_p: 0.95,
-          max_tokens: 300
+          contents: [{
+            parts: [{
+              text: `You are a helpful Jharkhand tourism assistant. Answer this question about Jharkhand tourism: ${input}`
+            }]
+          }]
         })
       });
 
-      if (!response.ok) {
-        console.error("OpenRouter API Error:", response.status, response.statusText);
-        throw new Error("API Error");
-      }
-
       const data = await response.json();
-      if (data.choices && data.choices[0]?.message?.content) {
-        return data.choices[0].message.content;
+      
+      if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+        return data.candidates[0].content.parts[0].text;
       } else {
-        throw new Error("Invalid response format");
+        throw new Error("Invalid Gemini response format");
       }
     } catch (error) {
-      console.error("OpenRouter API Error:", error);
+      console.error("Gemini API Error:", error);
       return getFallbackResponse(input);
     }
   };
 
   const getFallbackResponse = (input: string) => {
-    const responses = {
+    const responses: { [key: string]: string } = {
       "best places": "Jharkhand offers stunning destinations like Netarhat, Betla National Park, Hundru Falls, and Parasnath Hill.",
       "festivals": "Experience tribal festivals like Sarhul, Karma, and Tusu Parab, with music, dance, and local cuisine.",
       "handicrafts": "Explore authentic Dokra metal craft, Sohrai paintings, bamboo products, and traditional jewelry.",
@@ -134,9 +119,7 @@ export default function ChatBot() {
     };
 
     for (const [key, response] of Object.entries(responses)) {
-      if (input.toLowerCase().includes(key)) {
-        return response;
-      }
+      if (input.toLowerCase().includes(key)) return response;
     }
 
     return "I'd be happy to help you explore Jharkhand! Ask me about destinations, festivals, culture, adventure activities, wildlife, food, or local experiences.";
@@ -175,7 +158,7 @@ export default function ChatBot() {
             onChange={(e) => setLanguage(e.target.value)}
             className="text-xs bg-white/20 rounded px-2 py-1 text-white"
           >
-            {languages.map(lang => (
+            {languages.map((lang) => (
               <option key={lang.code} value={lang.code} className="text-gray-800">
                 {lang.native}
               </option>
@@ -192,16 +175,13 @@ export default function ChatBot() {
 
       {/* Messages */}
       <div className="h-80 overflow-y-auto p-4 space-y-3">
-        {messages.map(message => (
-          <div
-            key={message.id}
-            className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}
-          >
+        {messages.map((message) => (
+          <div key={message.id} className={`flex ${message.isBot ? "justify-start" : "justify-end"}`}>
             <div
               className={`max-w-[80%] p-3 rounded-2xl text-sm ${
                 message.isBot
-                  ? 'bg-gray-100 text-gray-800 rounded-bl-sm'
-                  : 'bg-green-600 text-white rounded-br-sm'
+                  ? "bg-gray-100 text-gray-800 rounded-bl-sm"
+                  : "bg-green-600 text-white rounded-br-sm"
               }`}
             >
               {message.text}
@@ -233,7 +213,7 @@ export default function ChatBot() {
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
             placeholder="Ask about destinations, culture, events..."
             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
           />

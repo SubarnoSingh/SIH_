@@ -48,7 +48,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-2 text-green-200">
                 <Phone className="h-4 w-4" />
-                <span className="text-sm">+91-XXXX-XXXX</span>
+                <span className="text-sm">+91 9832467109</span>
               </div>
               <div className="flex items-center space-x-2 text-green-200">
                 <Mail className="h-4 w-4" />
@@ -62,7 +62,7 @@ export default function Footer() {
         
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-green-300 text-sm">
-            © 2024 Jharkhand: Beyond Horizon. All rights reserved.
+            © 2025 Jharkhand: Beyond Horizon. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="text-green-300 hover:text-white text-sm transition-colors">Privacy Policy</a>

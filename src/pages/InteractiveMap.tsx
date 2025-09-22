@@ -7,7 +7,7 @@ const attractions = [
     name: 'Betla National Park',
     type: 'Wildlife',
     rating: 4.5,
-    image: 'https://images.pexels.com/photos/247431/pexels-photo-247431.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: '/pics/betla.webp?auto=compress&cs=tinysrgb&w=400',
     description: 'Famous for its tigers, elephants, and rich biodiversity'
   },
   {
@@ -15,7 +15,7 @@ const attractions = [
     name: 'Hundru Falls',
     type: 'Waterfall',
     rating: 4.3,
-    image: 'https://images.pexels.com/photos/210243/pexels-photo-210243.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: '/pics/hundru.webp?auto=compress&cs=tinysrgb&w=400',
     description: 'Spectacular 320-foot waterfall on the Subarnarekha River'
   },
   {
@@ -23,7 +23,7 @@ const attractions = [
     name: 'Ranchi Hill',
     type: 'Hill Station',
     rating: 4.1,
-    image: 'https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: '/pics/ranchi.jpg?auto=compress&cs=tinysrgb&w=400',
     description: 'Scenic hill station with panoramic city views'
   },
   {
@@ -31,7 +31,7 @@ const attractions = [
     name: 'Tagore Hill',
     type: 'Historical',
     rating: 4.0,
-    image: 'https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: '/pics/tagore.jpg?auto=compress&cs=tinysrgb&w=400',
     description: 'Historical site where Rabindranath Tagore used to meditate'
   },
   {
@@ -39,7 +39,7 @@ const attractions = [
     name: 'Dassam Falls',
     type: 'Waterfall',
     rating: 4.4,
-    image: 'https://images.pexels.com/photos/547036/pexels-photo-547036.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: '/pics/dassam.jpeg?auto=compress&cs=tinysrgb&w=400',
     description: 'Beautiful cascade falling from 144 feet height'
   }
 ];
@@ -59,36 +59,57 @@ const InteractiveMap: React.FC = () => {
     : attractions.filter(attraction => attraction.type.toLowerCase() === filter);
 
   useEffect(() => {
-    if (!apiKey) {
+    if (!apiKey || apiKey === 'your_google_maps_api_key_here') {
       setMapError('Google Maps API key not configured');
       return;
     }
 
     const loadGoogleMaps = () => {
+      // Check if Google Maps is already loaded
       if (window.google && window.google.maps) {
         initializeMap();
         return;
       }
 
+      // Remove existing script if any
+      const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
+      if (existingScript) {
+        existingScript.remove();
+      }
+
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
       script.async = true;
       script.defer = true;
-      script.onload = initializeMap;
-      script.onerror = () => setMapError('Failed to load Google Maps');
+      script.onerror = () => {
+        console.error('Failed to load Google Maps script');
+        setMapError('Failed to load Google Maps. Please check your API key.');
+      };
+      
+      // Set up global callback
+      (window as any).initMap = initializeMap;
+      
       document.head.appendChild(script);
     };
 
     const initializeMap = () => {
-      if (!mapRef.current) return;
+      if (!mapRef.current) {
+        console.error('Map container not found');
+        return;
+      }
 
       try {
+        console.log('Initializing Google Map...');
+        
         const map = new google.maps.Map(mapRef.current, {
           center: { lat: 23.6102, lng: 85.2799 }, // Ranchi coordinates
           zoom: 8,
+          mapTypeControl: true,
+          streetViewControl: true,
+          fullscreenControl: true,
           styles: [
             {
-              featureType: 'poi',
+              featureType: 'poi.business',
               elementType: 'labels',
               stylers: [{ visibility: 'off' }]
             }
@@ -96,42 +117,82 @@ const InteractiveMap: React.FC = () => {
         });
 
         googleMapRef.current = map;
+        console.log('Map initialized successfully');
 
-        // Add markers for attractions
+        // Add markers for attractions with real coordinates
+        const attractionCoords = [
+          { lat: 23.8772, lng: 84.1894 }, // Betla National Park
+          { lat: 23.4239, lng: 85.5906 }, // Hundru Falls
+          { lat: 23.3441, lng: 85.3096 }, // Ranchi Hill
+          { lat: 23.3598, lng: 85.3173 }, // Tagore Hill
+          { lat: 23.4847, lng: 85.4328 }  // Dassam Falls
+        ];
+
         filteredAttractions.forEach((attraction, index) => {
+          const position = attractionCoords[index] || {
+            lat: 23.6102 + (index * 0.1) - 0.2,
+            lng: 85.2799 + (index * 0.15) - 0.3
+          };
+
           const marker = new google.maps.Marker({
-            position: {
-              lat: 23.6102 + (index * 0.1) - 0.2,
-              lng: 85.2799 + (index * 0.15) - 0.3
-            },
+            position: position,
             map: map,
             title: attraction.name,
-            icon: {
-              url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                <svg width="30" height="40" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 0C6.716 0 0 6.716 0 15c0 8.284 15 25 15 25s15-16.716 15-25C30 6.716 23.284 0 15 0z" fill="#ef4444"/>
-                  <circle cx="15" cy="15" r="8" fill="white"/>
-                  <text x="15" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#ef4444">${index + 1}</text>
-                </svg>
-              `),
-              scaledSize: new google.maps.Size(30, 40)
-            }
+            animation: google.maps.Animation.DROP
+          });
+
+          const infoWindow = new google.maps.InfoWindow({
+            content: `
+              <div style="padding: 10px; max-width: 200px;">
+                <h3 style="margin: 0 0 5px 0; color: #1f2937;">${attraction.name}</h3>
+                <p style="margin: 0 0 5px 0; color: #6b7280; font-size: 12px;">${attraction.type}</p>
+                <p style="margin: 0; color: #374151; font-size: 13px;">${attraction.description}</p>
+                <div style="margin-top: 8px; display: flex; align-items: center;">
+                  <span style="color: #fbbf24;">★</span>
+                  <span style="margin-left: 4px; font-size: 12px;">${attraction.rating}</span>
+                </div>
+              </div>
+            `
           });
 
           marker.addListener('click', () => {
+            // Close all other info windows
+            if ((window as any).currentInfoWindow) {
+              (window as any).currentInfoWindow.close();
+            }
+            
+            infoWindow.open(map, marker);
+            (window as any).currentInfoWindow = infoWindow;
             setSelectedAttraction(attraction);
           });
         });
 
         setMapLoaded(true);
+        setMapError('');
+        
       } catch (error) {
         console.error('Map initialization error:', error);
-        setMapError('Failed to initialize map');
+        setMapError('Failed to initialize map: ' + (error as Error).message);
       }
     };
 
     loadGoogleMaps();
-  }, [apiKey, filteredAttractions]);
+    
+    // Cleanup function
+    return () => {
+      if ((window as any).initMap) {
+        delete (window as any).initMap;
+      }
+    };
+  }, [apiKey]);
+
+  // Separate effect for updating markers when filter changes
+  useEffect(() => {
+    if (googleMapRef.current && mapLoaded) {
+      // Clear existing markers would go here if we stored them
+      // For now, we'll reinitialize when filter changes
+    }
+  }, [filteredAttractions, mapLoaded]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8">
