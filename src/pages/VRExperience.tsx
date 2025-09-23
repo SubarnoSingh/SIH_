@@ -25,7 +25,7 @@ const VRExperience: React.FC<VRExperienceProps> = ({
       name: 'Betla National Park Safari',
       type: 'Wildlife',
       duration: '8 minutes',
-      image: '/pics/betla.webp',
+      image: '/betla.webp',
       description: 'Experience a virtual safari through Betla National Park and encounter tigers, elephants, and diverse wildlife.',
       features: ['360° Wildlife Views', 'Tiger Tracking', 'Elephant Encounters', 'Bird Watching']
     },
@@ -34,7 +34,7 @@ const VRExperience: React.FC<VRExperienceProps> = ({
       name: 'Hundru Falls Adventure',
       type: 'Waterfall',
       duration: '6 minutes',
-      image: '/pics/hundru.webp',
+      image: '/hundru.webp',
       description: 'Feel the mist and hear the roar of the magnificent Hundru Falls in this immersive VR experience.',
       features: ['Waterfall Sounds', 'Mist Effects', 'Rock Climbing View', 'Rainbow Moments']
     },
@@ -52,7 +52,7 @@ const VRExperience: React.FC<VRExperienceProps> = ({
       name: 'Tribal Village Life',
       type: 'Cultural',
       duration: '12 minutes',
-      image: '/pics/netarhat.jpeg',
+      image: '/netarhat.jpeg',
       description: 'Immerse yourself in authentic tribal culture, traditions, and daily life of Jharkhand communities.',
       features: ['Traditional Dance', 'Handicraft Making', 'Village Sounds', 'Cultural Stories']
     },
@@ -61,7 +61,7 @@ const VRExperience: React.FC<VRExperienceProps> = ({
       name: 'Parasnath Hill Trek',
       type: 'Adventure',
       duration: '15 minutes',
-      image: '/pics/parasnath.jpg',
+      image: '/parasnath.jpg',
       description: 'Trek to the highest peak of Jharkhand and experience the spiritual journey to Parasnath Hill.',
       features: ['Mountain Views', 'Trekking Path', 'Temple Visits', 'Meditation Spots']
     }

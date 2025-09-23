@@ -22,7 +22,7 @@ export default function MarketplacePage() {
       originalPrice: 2499,
       rating: 4.8,
       reviews: 47,
-      image: "/pics/dokra.webp",
+      image: "/dokra.webp",
       seller: "Tribal Craft Co-op",
       isAuthentic: true,
       description: "Handcrafted bronze horse using traditional Dokra technique by tribal artisans"
@@ -35,7 +35,7 @@ export default function MarketplacePage() {
       originalPrice: 3200,
       rating: 4.9,
       reviews: 89,
-      image: "/pics/forest_stay.jpg",
+      image: "/forest_stay.jpg",
       seller: "Green Valley Homestays",
       isAuthentic: true,
       description: "Sustainable accommodation in the heart of Netarhat's forest with organic meals",
@@ -49,7 +49,7 @@ export default function MarketplacePage() {
       originalPrice: 1200,
       rating: 4.7,
       reviews: 23,
-      image: "/pics/santali.jpeg",
+      image: "/santali.jpeg",
       seller: "Cultural Heritage Tours",
       isAuthentic: true,
       description: "Learn traditional Sohrai and Kohbar art from master artists"
@@ -62,7 +62,7 @@ export default function MarketplacePage() {
       originalPrice: 899,
       rating: 4.6,
       reviews: 34,
-      image: "/pics/bambo.webp",
+      image: "/bambo.webp",
       isAuthentic: true,
       description: "Eco-friendly bamboo products including baskets, lamps, and home decor"
     },
@@ -74,7 +74,7 @@ export default function MarketplacePage() {
       originalPrice: 4999,
       rating: 4.9,
       reviews: 67,
-      image: "/pics/tribal.jpeg",
+      image: "/tribal.jpeg",
       seller: "Authentic Village Tours",
       isAuthentic: true,
       description: "Immersive overnight stay with tribal families, traditional food, and cultural programs"
@@ -87,7 +87,7 @@ export default function MarketplacePage() {
       originalPrice: 599,
       rating: 4.5,
       reviews: 156,
-      image: "/pics/litti.webp",
+      image: "/litti.webp",
       seller: "Jharkhand Foods",
       isAuthentic: true,
       description: "Complete kit to make authentic Litti Chokha at home with recipe guide"

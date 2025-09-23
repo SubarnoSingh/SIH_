@@ -7,7 +7,7 @@ const attractions = [
     name: 'Betla National Park',
     type: 'Wildlife',
     rating: 4.5,
-    image: '/pics/betla.webp?auto=compress&cs=tinysrgb&w=400',
+    image: '/betla.webp?auto=compress&cs=tinysrgb&w=400',
     description: 'Famous for its tigers, elephants, and rich biodiversity'
   },
   {
@@ -15,7 +15,7 @@ const attractions = [
     name: 'Hundru Falls',
     type: 'Waterfall',
     rating: 4.3,
-    image: '/pics/hundru.webp?auto=compress&cs=tinysrgb&w=400',
+    image: '/hundru.webp?auto=compress&cs=tinysrgb&w=400',
     description: 'Spectacular 320-foot waterfall on the Subarnarekha River'
   },
   {
@@ -23,7 +23,7 @@ const attractions = [
     name: 'Ranchi Hill',
     type: 'Hill Station',
     rating: 4.1,
-    image: '/pics/ranchi.jpg?auto=compress&cs=tinysrgb&w=400',
+    image: '/ranchi.jpg?auto=compress&cs=tinysrgb&w=400',
     description: 'Scenic hill station with panoramic city views'
   },
   {
@@ -31,7 +31,7 @@ const attractions = [
     name: 'Tagore Hill',
     type: 'Historical',
     rating: 4.0,
-    image: '/pics/tagore.jpg?auto=compress&cs=tinysrgb&w=400',
+    image: '/tagore.jpg?auto=compress&cs=tinysrgb&w=400',
     description: 'Historical site where Rabindranath Tagore used to meditate'
   },
   {
@@ -39,7 +39,7 @@ const attractions = [
     name: 'Dassam Falls',
     type: 'Waterfall',
     rating: 4.4,
-    image: '/pics/dassam.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: '/dassam.jpeg?auto=compress&cs=tinysrgb&w=400',
     description: 'Beautiful cascade falling from 144 feet height'
   }
 ];
